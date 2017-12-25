@@ -43,7 +43,7 @@ if [ "$#" -le  "2" ]; then
        echo ""
        echo "Arguments missing"
        echo ""
-       echo "usage: 'upload.sh server file-to-upload remote-dir'"
+       echo "usage: 'upload server file-to-upload remote-dir'"
        echo "server must match a Host entry from ~/.ssh/config"
        echo ""
    else
@@ -64,7 +64,7 @@ if [ "$#" -le  "1" ]; then
        echo ""
        echo "Arguments missing"
        echo ""
-       echo "usage: 'download.sh server file-to-download'"
+       echo "usage: 'download server file-to-download'"
        echo "server must match a Host entry from ~/.ssh/config"
        echo "downloaded files can be found in serverdir"
        echo ""
@@ -85,6 +85,7 @@ fi
 
 if [ "$#" -le  "0" ]; then
        echo "Server argument missing"
+       echo "uasage: 'rbackup server' "
    else
        grep -e "^Host" ~/.ssh/config |grep $server | awk '{print $2}' | xargs -I{} ssh {} tar cvfz backup-{}.tar.gz /etc 	
        grep -e "^Host" ~/.ssh/config |grep $server | awk '{print $2}' | xargs -I{} scp {}:/root/backup-{}.tar.gz backups
