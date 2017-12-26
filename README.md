@@ -18,8 +18,10 @@ Its quite similar to ansible but only these four functions are available (atm)
 Unlike ansible it does not require Python and it does not require a separate Hosts file.
 These functions just read the server list from default ssh config file.
 
-You can address a hostname, part of hostname (ex. all "mail" servers) or simply all servers form config.
-These functions read the "Host" label
+You can address a hostname, part of hostname (ex. all "mail" servers) or simply all servers from config.
+These functions read the "Host" label.
+
+It assumes that all servers use private key authentication.
 
 Installation:
 
