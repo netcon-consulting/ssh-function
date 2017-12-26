@@ -1,14 +1,14 @@
 #!/bin/bash
 ## these commands requires ~/.ssh/config file to read servers
 ## it allows to target some or all servers at once
-## SSH functions to:
+## SSH functions to run:
 ## "remote "$server" $commandscript"
 ## execute remote commands to several servers
-## "rupload "$server" "$file" $remotedir"
+## "rupload "$server" "$file" "$remotedir"
 ## upload files to multiple servers
-## "rdownload "$server" $file"
+## "rdownload "$server" "$file"
 ## download files from multiple servers
-## "rbackup "$server""
+## "rbackup "$server"
 ## do a remote backup of /etc or other dirs to local directory
 ##
 ## this template should be added to ~/.bashrc
