@@ -31,3 +31,21 @@ Execution:
 
 Required parameters are displayed when calling the function.
 
+
+Examples:
+
+"remote all template.sh"
+This will execute all commands in template.sh on all systems.
+Without configuration this will display the remote hostname only.
+
+"rupload file dns /etc"
+
+This will upload a file to /etc on remote servers that have the string "dns" in their Hosts Label from ~/.ssh/config
+
+"rbackup all"
+
+This will compress all /etc Dirs on remote servers and download them to backups/remoteservername.tar.gz
+
+"rdownload all /etc/passwd"
+
+This will download /etc/passwd from all servers to servername/paswd
