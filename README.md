@@ -35,6 +35,7 @@ Required parameters are displayed when calling the function.
 Examples:
 
 "remote all template.sh"
+
 This will execute all commands in template.sh on all systems.
 Without configuration this will display the remote hostname only.
 
