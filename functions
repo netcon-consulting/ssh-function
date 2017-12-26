@@ -1,13 +1,14 @@
+#!/bin/bash
 ## these commands requires ~/.ssh/config file to read servers
 ## it allows to target some or all servers at once
 ## SSH functions to:
-## "remote $server $commandscript"
+## "remote "$server" $commandscript"
 ## execute remote commands to several servers
-## "rupload $server $file $remotedir"
+## "rupload "$server" "$file" $remotedir"
 ## upload files to multiple servers
-## "rdownload $server $file"
+## "rdownload "$server" $file"
 ## download files from multiple servers
-## "rbackup $server"
+## "rbackup "$server""
 ## do a remote backup of /etc or other dirs to local directory
 ##
 ## this template should be added to ~/.bashrc
@@ -17,8 +18,8 @@ function remote()
 {
 server=$1
 script=$2
-if [[ $server == "all" ]]; then
-        grep -e "^Host" ~/.ssh/config | awk '{ print $2 }' | xargs -I{} ssh {} "echo `base64 -i $script` | base64 -d | bash -s "
+if [[ "$server" == "all" ]]; then
+        grep -e "^Host" ~/.ssh/config | awk '{ print $2 }' | xargs -I{} ssh {} "echo $(base64 -i "$script") | base64 -d | bash -s "
 
 fi
 if [ "$#" -le  "1" ]; then
@@ -27,7 +28,7 @@ if [ "$#" -le  "1" ]; then
        echo "server must match a Host entry in ~/.ssh/config"
        echo ""
    else
-       grep -e "^Host" ~/.ssh/config |grep $server | awk '{print $2}' | xargs -I{} ssh {} "echo `base64 -i $script` | base64 -d | bash -s "
+       grep -e "^Host" ~/.ssh/config |grep "$server" | awk '{print $2}' | xargs -I{} ssh {} "echo $(base64 -i "$script") | base64 -d | bash -s "
 fi
 }
 ################################################################################################################
@@ -36,8 +37,8 @@ function rupload()
 server=$1
 file=$2
 remote_dir=$3
-if [[ $server == "all" ]]; then
-        grep -e "^Host" ~/.ssh/config | awk '{ print $2 }' #| xargs -I{} scp $file {}:$remote_dir
+if [[ "$server" == "all" ]]; then
+        grep -e "^Host" ~/.ssh/config | awk '{ print $2 }' | xargs -I{} scp "$file" {}:"$remote_dir"
 fi
 if [ "$#" -le  "2" ]; then
        echo ""
@@ -47,7 +48,7 @@ if [ "$#" -le  "2" ]; then
        echo "server must match a Host entry from ~/.ssh/config"
        echo ""
    else
-       grep -e "^Host" ~/.ssh/config |grep $server | awk '{print $2}' | xargs -I{} scp $file {}:$remote_dir
+       grep -e "^Host" ~/.ssh/config |grep "$server" | awk '{print $2}' | xargs -I{} scp "$file" {}:"$remote_dir"
 fi
 }
 ################################################################################################################
@@ -55,9 +56,9 @@ function rdownload()
 {
 server=$1
 file=$2
-if [[ $server == "all" ]]; then
-        grep -e "^Host" ~/.ssh/config | awk '{ print $2 }' #| xargs -I{} mkdir {}
-        grep -e "^Host" ~/.ssh/config | awk '{ print $2 }' #| xargs -I{} scp {}:$file {}/
+if [[ "$server" == "all" ]]; then
+        grep -e "^Host" ~/.ssh/config | awk '{ print $2 }' | xargs -I{} mkdir {}
+        grep -e "^Host" ~/.ssh/config | awk '{ print $2 }' | xargs -I{} scp {}:"$file" {}/
 fi
 ## address selected servers or groups  in ~/.ssh/config
 if [ "$#" -le  "1" ]; then
@@ -69,15 +70,15 @@ if [ "$#" -le  "1" ]; then
        echo "downloaded files can be found in serverdir"
        echo ""
    else
-       grep -e "^Host" ~/.ssh/config |grep $server | awk '{print $2}' | xargs -I{} mkdir {}
-       grep -e "^Host" ~/.ssh/config |grep $server | awk '{print $2}' | xargs -I{} scp {}:$file {}/
+       grep -e "^Host" ~/.ssh/config |grep "$server" | awk '{print $2}' | xargs -I{} mkdir {}
+       grep -e "^Host" ~/.ssh/config |grep "$server" | awk '{print $2}' | xargs -I{} scp {}:"$file" {}/
 fi
 }
 ################################################################################################################
 function rbackup()
 {
 server=$1
-if [[ $server == "all" ]]; then
+if [[ "$server" == "all" ]]; then
         grep -e "^Host" ~/.ssh/config | awk '{ print $2 }' | xargs -I{} ssh {} tar cvfz backup-{}.tar.gz /etc
         grep -e "^Host" ~/.ssh/config | awk '{ print $2 }' | xargs -I{} scp {}:/root/backup-{}.tar.gz backups
         grep -e "^Host" ~/.ssh/config | awk '{ print $2 }' | xargs -I{} ssh {} rm /root/backup-{}.tar.gz
@@ -87,8 +88,8 @@ if [ "$#" -le  "0" ]; then
        echo "Server argument missing"
        echo "uasage: 'rbackup server' "
    else
-       grep -e "^Host" ~/.ssh/config |grep $server | awk '{print $2}' | xargs -I{} ssh {} tar cvfz backup-{}.tar.gz /etc 	
-       grep -e "^Host" ~/.ssh/config |grep $server | awk '{print $2}' | xargs -I{} scp {}:/root/backup-{}.tar.gz backups
-       grep -e "^Host" ~/.ssh/config |grep $server | awk '{print $2}' | xargs -I{} ssh {} rm /root/backup-{}.tar.gz  
+       grep -e "^Host" ~/.ssh/config |grep "$server" | awk '{print $2}' | xargs -I{} ssh {} tar cvfz backup-{}.tar.gz /etc 	
+       grep -e "^Host" ~/.ssh/config |grep "$server" | awk '{print $2}' | xargs -I{} scp {}:/root/backup-{}.tar.gz backups
+       grep -e "^Host" ~/.ssh/config |grep "$server" | awk '{print $2}' | xargs -I{} ssh {} rm /root/backup-{}.tar.gz  
 fi
 }
