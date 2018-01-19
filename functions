@@ -11,7 +11,7 @@
 ## "rbackup "$server"
 ## do a remote backup of /etc or other dirs to local directory
 ##
-## this template should be added to ~/.bashrc
+## this template should be added to ~/.bashrc or ~/.bash_aliases
 
 ################################################################################################################
 function remote()
