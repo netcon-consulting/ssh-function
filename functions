@@ -1,5 +1,5 @@
 #!/bin/bash
-## these commands requires ~/.ssh/config file to read servers
+## these commands require ~/.ssh/config file to read servers
 ## it allows to target some or all servers at once
 ## SSH functions to run:
 ## "remote "$server" $commandscript"
