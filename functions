@@ -19,31 +19,24 @@ server=$1
 script=$2
 ##display help text if less than two parameters
 if [ "$#" -le  "1" ]; then
-       echo ""
-       echo "server and script argument missing"
-       echo "example: remote 'server' 'script'"
-       echo "server must match a Host entry in ~/.ssh/config"
-       echo ""
+       printf "%s\n" "" "server and script argument missing" \
+       "example: remote 'server' 'script'" "server must match a Host entry in ~/.ssh/config" ""\
+       "script can also be a double quoted single command"
        return
+       elif [[ ! -f $2 ]]; then
+        echo "#!/bin/bash" > /tmp/script
+        echo 'echo -e "\e[1;31m$(hostname)\e[0m"' >> /tmp/script
+	    echo "$2" >> /tmp/script
+	    script=/tmp/script 
 fi
 ## add red colored hostname to the end of script to identify which server run the script
 grep -qF "31m\$(hostname)" $2 || echo 'echo -e "\e[1;31m$(hostname)\e[0m"' >> $2
 ## all servers in ~/.ssh/config
-if [[ "$server" == "all" && "$OSTYPE" == "linux-gnu" ]]; then
+if [[ "$server" == "all" ]]; then
        grep -e "^Host" ~/.ssh/config | awk '{ print $2 }' | xargs -I{} ssh {} "echo $(base64 "$script") | base64 -d | bash -s "
 fi
-## all servers in ~/.ssh/config on OSX
-if [[ "$server" == "all" && "$OSTYPE" != "linux-gnu" ]]; then
-       grep -e "^Host" ~/.ssh/config | awk '{ print $2 }' | xargs -I{} ssh {} "echo $(base64 -i "$script") | base64 -d | bash -s "
-fi
 ## selected servers in ~/.ssh/config
-       ##detect linux
-if [[ "$OSTYPE" == "linux-gnu" ]]; then
-       grep -e "^Host" ~/.ssh/config |grep "$server" | awk '{print $2}' | xargs -I{} ssh {} "echo $(base64 "$script") | base64 -d | bash -s "
-       else
-       ##OSX requires "base64 -i" for encoding
-       grep -e "^Host" ~/.ssh/config |grep "$server" | awk '{print $2}' | xargs -I{} ssh {} "echo $(base64 -i "$script") | base64 -d | bash -s "
-fi
+grep -e "^Host" ~/.ssh/config |grep "$server" | awk '{print $2}' | xargs -I{} ssh {} "echo $(base64 "$script") | base64 -d | bash -s "
 }
 ################################################################################################################
 function rupload()
