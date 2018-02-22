@@ -64,9 +64,9 @@ if [ "$#" -le  "2" ]; then
     allhosts| xargs -I{} scp -r "$file" {}:"$remote_dir" 
     elif
     [ -f $file ]; then
-    somehosts |awk '{print $2}' | xargs -I{} scp "$file" {}:"$remote_dir"
+    somehosts |xargs -I{} scp "$file" {}:"$remote_dir"
     else
-    somehosts |awk '{print $2}' | xargs -I{} scp -r "$file" {}:"$remote_dir"
+    somehosts |xargs -I{} scp -r "$file" {}:"$remote_dir"
 fi
 }
 ################################################################################################################
